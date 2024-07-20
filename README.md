@@ -49,7 +49,7 @@ Docker container will start with all their 4 services (nginx, laravel, mysql, ph
 
 I had permission issues and fresh-installed Laravel can't continue because can't write inside *laravel* folder. Also, I can't read or write inside that folder because the user who's editing code in my VSCode is santiago, and the user of the folder is www-data, indeed. I solved with these two commands:
 
-In parent folder (where *.docker* it's placed, and probably *laravel* and *mysql* too):
+In parent folder (where *.docker* it's placed, and probably *laravel* and *mysql* too) do this as **sudo**:
 
 ```bash
 chmod 777 -R laravel
