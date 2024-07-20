@@ -53,5 +53,6 @@ In parent folder (where *.docker* it's placed, and probably *laravel* and *mysql
 
 ```bash
 chmod 777 -R laravel
+chmod 777 -R mysql
 chown -R www-data:www-data laravel # just to be sure
 ```

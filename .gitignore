@@ -1,3 +1,2 @@
 .docker/.env
-laravel
-mysql
+mysql/#innodb_temp
