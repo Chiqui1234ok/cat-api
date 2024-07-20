@@ -12,6 +12,17 @@ make build
 You should place "laravel" folder with laravel app in it, and "mysql" with an installation of mysql (and a database, of course).
 If you don't have a mysql database placed, docker will create one for you.
 
+### Environment variables
+
+Inside *.docker* folder, create .env file with this content:
+
+```bash
+MYSQL_DATABASE=laravel
+MYSQL_USER=writeUsernameHere
+MYSQL_PASSWORD=writePasswordHere
+MYSQL_ROOT_PASSWORD=writePasswordForRootHere
+```
+
 ## If none laravel install is present, install it:
 
 1. Enter into the container with:
@@ -33,3 +44,14 @@ make up
 ```
 
 Docker container will start with all their 4 services (nginx, laravel, mysql, phpmyadmin)
+
+## Address permission issues
+
+I had permission issues and fresh-installed Laravel can't continue because can't write inside *laravel* folder. I solved with these two commands:
+
+In parent folder (where *.docker* it's placed, and probably *laravel* and *mysql* too):
+
+```bash
+chmod 771 -R laravel
+chown -R www-data:www-data laravel
+```
