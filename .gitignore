@@ -1,2 +1,2 @@
 .docker/.env
-mysql/#innodb_temp
+mysql
