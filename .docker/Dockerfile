@@ -19,8 +19,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Crear el proyecto Laravel si no existe composer.json
-RUN if [ ! -f composer.json ]; then \
-    composer create-project --prefer-dist laravel/laravel .; \
+RUN if [ ! -f /var/www/html/composer.json ]; then \
+        composer create-project --prefer-dist laravel/laravel .; \
     fi
 
 # Dar permisos al directorio de almacenamiento y caché de Laravel
