@@ -15,6 +15,14 @@ class UserController extends Controller
 {
     public function profile()
     {
-        echo 'profile';
+        $user = auth()->user();
+
+        return response()->json([
+            'status' => true,
+            'messages' =>   $user && $user->id ? 
+                            array('user' => 'User loaded successfully') :
+                            array('user' => 'User can\'t be loaded, credentials are ok?'),
+            'data' => $user,
+        ]);
     }
 }
