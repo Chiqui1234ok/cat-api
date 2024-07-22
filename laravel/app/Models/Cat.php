@@ -11,7 +11,7 @@ class Cat extends Model
 
     protected $table = 'cats';
 
-    protected $fillable = ['breeds', 'estimatedLife', 'origin'];
+    protected $fillable = ['name', 'breed', 'origin', 'estimatedLife', 'user_id',];
 
     protected $colors = [
         'color_ids' => 'array'
@@ -19,7 +19,11 @@ class Cat extends Model
 
     public function colors()
     {
-        return $this->belongsToMany(Color::class, 'cats_colors', 'cat_id', 'color_id');
-        // 'cats_colors' is pivot table, it has 'cat_id' and 'color_id' as fields
+        return $this->belongsToMany(Color::class, 'cats_colors');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

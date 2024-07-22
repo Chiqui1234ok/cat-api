@@ -5,21 +5,26 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CatController;
+use App\Http\Controllers\ColorController;
 
 Route::view('/', 'api');
 
-// Register
-Route::post('/user/register', [AuthController::class, 'registerUser']);
-// Login
-Route::post('/user/login', [AuthController::class, 'loginUser']);
+// User
+Route::post('/user/register', [AuthController::class, 'register']);
+Route::post('/user/login', [AuthController::class, 'login']);
 
+/*
+    * Secured routes
+*/
 Route::group([
     'middleware' => ['auth:sanctum']
 ], function()
 {
+    // User
     Route::post('/user/profile', [UserController::class, 'profile']);
+    Route::post('/user/logout', [AuthController::class, 'logout']);
+    // Cat
+    Route::post('/cat', [CatController::class, 'store']);
+    // Color
+    Route::post('/color', [ColorController::class, 'store']);
 });
-/*
-    * Secured routes
-*/
-Route::middleware('auth:sanctum')->post('/cat', [CatController::class, 'store']);
