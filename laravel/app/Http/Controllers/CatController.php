@@ -4,38 +4,57 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+// Model
 use App\Models\Cat;
+
 
 class CatController extends Controller
 {
     public function store(Request $request)
     {
+        $messages = array();
+        $cat = null;
+
+        Log::debug($request);
+        Log::debug('auth id');
+        Log::debug(Auth::id());
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'breed' => 'required|string|max:255',
+            'estimatedLife' => 'int',
+            'origin' => 'required|string|max:255',
             'color_ids' => 'required|array',
             'color_ids.*' => 'exists:colors,id', // Color need to exist in pivot table
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(
-                [
-                    'errors' => $validator->errors()
-                ], 
-                422
-            );
+        if ($validator->fails())
+        {
+            $messages = $validator->errors();
+        } else
+        {
+            $validatedData = $validator->validated();
+            // Create a new cat in DB
+            $cat = Cat::create([
+                'name' => $validatedData['name'],
+                'breed' => $validatedData['breed'],
+                'estimatedLife' => $validatedData['estimatedLife'],
+                'origin' => $validatedData['origin'],
+                'user_id' => Auth::id(),
+            ]);
+            $cat->colors()->sync($validatedData['color_ids']);
+            
+            if($cat && $cat->id) {
+                $messages = array('You\'ve uploaded a new cat! It\'s so gorgeous!');
+            }
         }
-
-        // Create a new cat in DB
-        $cat = new Cat();
-        $cat->name = $request->input('name');
-        $cat->color_ids = $request->input('color_ids'); // This field is json in my db
-        $cat->save();
 
         return response()->json(
             [
-                'message' => 'Cat created successfully',
-                'cat' => $cat,
-                'errors' => null
+                'messages' => $messages,
+                'data' => $cat,
             ], 
             201
         );
