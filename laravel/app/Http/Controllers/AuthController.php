@@ -13,7 +13,7 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function registerUser(Request $request)
+    public function register(Request $request)
     {
         try {
             // 1. Validate user's input
@@ -61,12 +61,10 @@ class AuthController extends Controller
         }
     }
 
-    public function loginUser(Request $request)
+    public function login(Request $request)
     {
         try
         {
-            Log::debug('request');
-            Log::debug($request->all());
             // 1.Validate user's input
             $credentials = Validator::make($request->only('email', 'password'),
             [
@@ -83,14 +81,13 @@ class AuthController extends Controller
                 // $request->session()->regenerate();
                 return response()->json([
                     'success' => false,
-                    // if array's empty, it's because validation doesn't fail, just the Auth attemp
+                    // if array's empty, it's because validation doesn't fail, just the Auth attempt
                     'messages' =>   empty($credentials->errors()) ?
                                     array('user' => 'Incorrect email or password') :
                                     $credentials->errors()
                 ], 401);
             }
 
-            // $user = User::where($request->only('email', 'password'))->first();
             $user = Auth::user();
             $token = $user->createToken('API TOKEN')->plainTextToken;
             // 3. Return a nice response if the user loggued in correctly
@@ -106,11 +103,20 @@ class AuthController extends Controller
     
             return response()->json([
                 'success' => false,
-                'messages' =>   array(
-                                    'server' =>
-                                    'Unknown error from the server. Please, try again in a few minutes.'
+                'messages' =>   array('Unknown error from the server. Please, try again in a few minutes.'
                                 )
             ], 500);
         }
+    }
+
+    public function logout(Request $request)
+    {
+        auth()->user()->tokens()->delete();
+
+        return response()->json([
+            'status' => true,
+            'messages' => 'User logged out successfully',
+            'data' => null,
+        ]);
     }
 }
