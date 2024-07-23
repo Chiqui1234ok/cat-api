@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CatController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\ImageController;
 
 Route::view('/', 'api');
 
@@ -27,4 +28,6 @@ Route::group([
     Route::post('/cat', [CatController::class, 'store']);
     // Color
     Route::post('/color', [ColorController::class, 'store']);
+    // Color
+    Route::post('/image', [ImageController::class, 'store']);
 });
