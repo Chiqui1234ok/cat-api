@@ -17,7 +17,7 @@ class ImageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,jpg,png,bmp,gif,webp|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'cat_id' => 'required|exists:cats,id',
         ]);
 
@@ -27,7 +27,7 @@ class ImageController extends Controller
 
         $image = Image::create([
             'file_name' => $fileName,
-            'file_path' => '/storage/' . $filePath,
+            'file_path' => Storage::url($filePath),
             'cat_id' => $request->cat_id,
         ]);
 
