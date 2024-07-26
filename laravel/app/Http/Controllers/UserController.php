@@ -15,14 +15,22 @@ class UserController extends Controller
 {
     public function profile()
     {
-        $user = auth()->user();
+        try {
+            $user = auth()->user();
 
-        return response()->json([
-            'status' => true,
-            'messages' =>   $user && $user->id ? 
-                            array('user' => 'User loaded successfully') :
-                            array('user' => 'User can\'t be loaded, credentials are ok?'),
-            'data' => $user,
-        ]);
+            return response()->json([
+                'status' => true,
+                'messages' =>   $user && $user->id ? 
+                                array('user' => 'User loaded successfully') :
+                                array('user' => 'User can\'t be loaded, credentials are ok?'),
+                'data' => $user,
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'messages' =>   array('Unknown error from the server. Please, try again in a few minutes.'),
+                'data' => $user,
+            ]);
+        }
     }
 }
