@@ -74,8 +74,7 @@ class AuthController extends Controller
 
             // 2. Attempt login
             $auth = Auth::attempt($request->only('email', 'password'));
-            Log::debug('auth');
-            Log::debug($auth);
+           
             if($credentials->fails() || !$auth)
             {
                 // $request->session()->regenerate();
